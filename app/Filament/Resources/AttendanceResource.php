@@ -100,6 +100,13 @@ class AttendanceResource extends Resource
     {
         return $table
             ->modifyQueryUsing(function (Builder $query) {
+
+                if (Auth::user()->role === 'admin') {
+                    return $query;
+                }
+
+                // Non-admin users can only view their own component
+                return 
                 $userId = Auth::user()->id;
                 $query->where('user_id', $userId);
             })
