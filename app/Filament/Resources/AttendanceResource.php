@@ -105,11 +105,13 @@ class AttendanceResource extends Resource
             })
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Nama')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.role')
                     ->visible(Auth::user()->role === 'admin')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->label('Datang/Pulang')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'datang' => 'info',
@@ -117,11 +119,13 @@ class AttendanceResource extends Resource
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('img')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Image'),
                 Tables\Columns\TextColumn::make('address')
+                    ->label('Lokasi Absen')
                     ->limit(20)
                     ->searchable(),
-                Tables\Columns\TextColumn::make('Status')
+                Tables\Columns\TextColumn::make('Absensi')
                     ->state(function (Attendance $record) {
                         $submissionTime = Carbon::parse($record->created_at); // Assuming the column holds the submission time
                         $deadlineTime = Carbon::parse('07:00:00'); // Static value for the deadline time
