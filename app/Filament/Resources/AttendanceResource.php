@@ -118,7 +118,7 @@ class AttendanceResource extends Resource
                         'pulang' => 'success',
                     })
                     ->searchable(),
-                Tables\Columns\TextColumn::make('img')
+                Tables\Columns\ImageColumn::make('img')
                     ->searchable()
                     ->label('Image'),
                 Tables\Columns\TextColumn::make('address')
