@@ -36,6 +36,7 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('role')
+                    ->native(false)
                     ->options([
                         'admin' =>'Administrator',
                         'worker' => 'Worker',
@@ -55,7 +56,6 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role')
-                    ->native(false)
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'admin' => 'info',
