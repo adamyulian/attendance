@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use Closure;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Get;
@@ -11,12 +12,13 @@ use App\Models\Attendance;
 use Filament\Tables\Table;
 use App\Helpers\LocationHelpers;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AttendanceResource\Pages;
 use App\Filament\Resources\AttendanceResource\RelationManagers;
-use Filament\Forms\Components\Section;
 
 class AttendanceResource extends Resource
 {
@@ -29,6 +31,7 @@ class AttendanceResource extends Resource
         return $form
             ->schema([
                 Section::make('Absensi Kedatangan/Kepulangan')
+                // ->placeholder('Pilih Datang/Pulang')
                 ->columns(2)
                 ->schema([
                     Forms\Components\Select::make('status')
@@ -96,8 +99,15 @@ class AttendanceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $userId = Auth::user()->id;
+                $query->where('user_id', $userId);
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.role')
+                    ->visible(Auth::user()->role === 'admin')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -111,6 +121,33 @@ class AttendanceResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                     ->limit(20)
                     ->searchable(),
+                Tables\Columns\TextColumn::make('Status')
+                    ->state(function (Attendance $record) {
+                        $submissionTime = Carbon::parse($record->created_at); // Assuming the column holds the submission time
+                        $deadlineTime = Carbon::parse('07:00:00'); // Static value for the deadline time
+
+                        $deadlineDay = $record->created_at->format('Y-m-d');
+                        $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
+
+                        if ($submissionTime->lte($deadline)) {
+                            // On time or before the deadline
+                            return 'On Time';
+                        } else {
+                            // Late
+                            $lateDuration = $submissionTime->diff($deadline);
+                            $hours = $lateDuration->format('%h');
+                            $minutes = $lateDuration->format('%i');
+                        
+                            if ($hours >= 1) {
+                                // Late by more than 1 hour
+                                return $hours . ' Hours and ' . $minutes . ' Minutes Late';
+                            } else {
+                                // Late by less than 1 hour
+                                return $minutes . ' Minutes Late';
+                            }
+                        }
+
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->label('Time')
