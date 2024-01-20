@@ -43,31 +43,31 @@ class AttendanceResource extends Resource
                     ->native(false),
                     Map::make('location')
                     ->columnSpanFull()
-                    // ->rules([
+                    ->rules([
                         
-                    //     fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
-                    //             // The allowed location (latitude and longitude).
-                    //             // $allowedLocation = [Target::find($get('target_id'))->lat, Target::find($get('target_id'))->lng];
-                    //             // dd($allowedLocation);
-                    //             $allowedLocation = [-7.309865473166658, 112.74843818425389];
+                        fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
+                                // The allowed location (latitude and longitude).
+                                // $allowedLocation = [Target::find($get('target_id'))->lat, Target::find($get('target_id'))->lng];
+                                // dd($allowedLocation);
+                                $allowedLocation = [-7.309865473166658, 112.74843818425389];
                     
-                    //             // The radius in meters.
-                    //             $radius = 100;
+                                // The radius in meters.
+                                $radius = 100;
                     
-                    //             // Convert the value (user's location) to an array [latitude, longitude].
-                    //             // $userLocation = explode(',', $value);
-                    //             $userLocation = [$get('lat'), $get('lng')];
+                                // Convert the value (user's location) to an array [latitude, longitude].
+                                // $userLocation = explode(',', $value);
+                                $userLocation = [$get('lat'), $get('lng')];
                     
-                    //             // Calculate the distance between user and allowed location.
-                    //             $distance = LocationHelpers::haversineDistance($userLocation, $allowedLocation);
+                                // Calculate the distance between user and allowed location.
+                                $distance = LocationHelpers::haversineDistance($userLocation, $allowedLocation);
 
                                                                   
-                    //             // Check if the user is within the specified radius.
-                    //             if ($distance > $radius) {
-                    //                 $fail("The selected location is not within the allowed radius.");
-                    //             }
+                                // Check if the user is within the specified radius.
+                                if ($distance > $radius) {
+                                    $fail("Lokasi Anda Tidak berada pada Radius yang diperbolehkan");
+                                }
                             
-                    //     }])
+                        }])
                     ->label('Your Location')
                     ->geolocate() // adds a button to request device location and set map marker accordingly
                     ->geolocateOnLoad(true, 'always')// Enable geolocation on load for every form
