@@ -70,7 +70,7 @@ class AttendanceResource extends Resource
                         }])
                     ->label('Your Location')
                     ->geolocate() // adds a button to request device location and set map marker accordingly
-                    ->geolocateOnLoad(true, 'always')// Enable geolocation on load for every form
+                    // ->geolocateOnLoad(true, 'always')// Enable geolocation on load for every form
                     ->draggable(false) // Disable dragging to move the marker
                     ->clickable(false) // Disable clicking to move the marker
                     ->defaultZoom(15) // Set the initial zoom level to 500
@@ -105,10 +105,9 @@ class AttendanceResource extends Resource
                     return $query;
                 }
 
-                // Non-admin users can only view their own component
-                return 
+                // Non-admin users can only view their own component 
                 $userId = Auth::user()->id;
-                $query->where('user_id', $userId);
+                return $query->where('user_id', $userId);
             })
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
