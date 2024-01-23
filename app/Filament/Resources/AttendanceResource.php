@@ -224,17 +224,16 @@ class AttendanceResource extends Resource
     {
         return $infolist
             ->schema([
-                Group::make([
                     InfolistSection::make('Attendance Information')
-                    ->columns(4)
+                    ->columnSpanFull()
                     ->schema([
                         TextEntry::make('user.name')
-                            ->columnSpan(4)
+                        ->columnSpanFull()
                             ->label('Nama Personil')
                             ->weight(FontWeight::Bold)
                             ->size(TextEntry\TextEntrySize::Large),
                         TextEntry::make('status')
-                            ->columnSpan(4)
+                        ->columnSpanFull()
                             ->badge()
                             ->color(fn (string $state): string => match ($state) {
                                 'datang' => 'info',
@@ -242,16 +241,16 @@ class AttendanceResource extends Resource
                             })
                             ->label('Status'),
                         TextEntry::make('created_at')
-                            ->columnSpan(4)
+                        ->columnSpanFull()
                             ->label('Time'),
                         ImageEntry::make('img')
                             ->extraImgAttributes([
                             'alt' => 'Logo',
                             'loading' => 'lazy',
                             ])
+                            ->columnSpanFull()
                             ->size(100)
                         ]),
-                ])
             ]);
     }
 
