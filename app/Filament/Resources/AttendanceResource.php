@@ -114,9 +114,7 @@ class AttendanceResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.role')
-                    ->visible(Auth::user()->role === 'admin')
-                    ->sortable(),
+               
                 Tables\Columns\TextColumn::make('status')
                     ->label('Datang/Pulang')
                     ->badge()
@@ -125,13 +123,11 @@ class AttendanceResource extends Resource
                         'pulang' => 'success',
                     })
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('img')
-                    ->searchable()
-                    ->label('Image'),
-                Tables\Columns\TextColumn::make('address')
-                    ->label('Lokasi Absen')
-                    ->limit(20)
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->label('Time')
+                    ->sortable(),
+               
                 Tables\Columns\TextColumn::make('Absensi')
                     ->state(function (Attendance $record) {
                         $action = $record->status;
@@ -180,38 +176,16 @@ class AttendanceResource extends Resource
                             return 'Invalid action type'; // Handle other cases as needed
                         }
                     }
-                    ),
-                // Tables\Columns\TextColumn::make('Absensi')
-                //     ->state(function (Attendance $record) {
-                //         $submissionTime = Carbon::parse($record->created_at); // Assuming the column holds the submission time
-                //         $deadlineTime = Carbon::parse('07:00:00'); // Static value for the deadline time
+                ),
 
-                //         $deadlineDay = $record->created_at->format('Y-m-d');
-                //         $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
-
-                //         if ($submissionTime->lte($deadline)) {
-                //             // On time or before the deadline
-                //             return 'On Time';
-                //         } else {
-                //             // Late
-                //             $lateDuration = $submissionTime->diff($deadline);
-                //             $hours = $lateDuration->format('%h');
-                //             $minutes = $lateDuration->format('%i');
-                        
-                //             if ($hours >= 1) {
-                //                 // Late by more than 1 hour
-                //                 return $hours . ' Hours and ' . $minutes . ' Minutes Late';
-                //             } else {
-                //                 // Late by less than 1 hour
-                //                 return $minutes . ' Minutes Late';
-                //             }
-                //         }
-
-                //     }),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->label('Time')
-                    ->sortable(),
+                Tables\Columns\ImageColumn::make('img')
+                ->searchable()
+                ->label('Image'),
+                Tables\Columns\TextColumn::make('address')
+                ->label('Lokasi Absen')
+                ->limit(20)
+                ->searchable(),
+                
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
