@@ -20,11 +20,12 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Infolists\Components\Group;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AttendanceResource\Pages;
+use Filament\Infolists\Components\Section as InfolistSection;
 use App\Filament\Resources\AttendanceResource\RelationManagers;
-use Filament\Infolists\Components\ImageEntry;
 
 class AttendanceResource extends Resource
 {
@@ -223,7 +224,7 @@ class AttendanceResource extends Resource
     {
         return $infolist
             ->schema([Group::make([
-                Section::make('Attendance Information')
+                InfolistSection::make('Attendance Information')
                 ->columns(4)
                 ->schema([
                     TextEntry::make('user.name')
