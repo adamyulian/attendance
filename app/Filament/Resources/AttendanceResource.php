@@ -159,9 +159,12 @@ class AttendanceResource extends Resource
                         } elseif ($action === 'pulang') {
                             $departureTime = Carbon::parse($record->created_at);
                             $agreedDepartureTime = Carbon::parse('17:00:00');
+
+                            $departureDay = $record->created_at->format('Y-m-d');
+                            $agreedDeparture = Carbon::parse($departureDay)->setTime($agreedDepartureTime->hour, $agreedDepartureTime->minute, $agreedDepartureTime->second);
                     
-                            if ($departureTime->lt($agreedDepartureTime)) {
-                                $earlyDuration = $agreedDepartureTime->diff($departureTime);
+                            if ($departureTime->lt($agreedDeparture)) {
+                                $earlyDuration = $agreedDeparture->diff($departureTime);
                                 $hours = $earlyDuration->format('%h');
                                 $minutes = $earlyDuration->format('%i');
                     
