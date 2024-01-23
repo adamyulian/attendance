@@ -133,51 +133,50 @@ class AttendanceResource extends Resource
                     ->limit(20)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('Absensi')
-                    ->state(function (Attendance $record) {
-                        $action = $record->status;
+                ->state(function (Attendance $record) {
+                    $action = $record->status;
                     
-                        if ($action === 'datang') {
-                            $submissionTime = Carbon::parse($record->created_at);
-                            $deadlineTime = Carbon::parse('08:00:00');
+                    if ($action === 'datang') {
+                        $submissionTime = Carbon::parse($record->created_at);
+                        $deadlineTime = Carbon::parse('08:00:00');
                     
-                            $deadlineDay = $record->created_at->format('Y-m-d');
-                            $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
+                        $deadlineDay = $record->created_at->format('Y-m-d');
+                        $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
                     
-                            if ($submissionTime->lte($deadline)) {
-                                return 'On Time';
-                            } else {
-                                $lateDuration = $submissionTime->diff($deadline);
-                                $hours = $lateDuration->format('%h');
-                                $minutes = $lateDuration->format('%i');
-                    
-                                if ($hours >= 1) {
-                                    return $hours . ' Hours and ' . $minutes . ' Minutes Late';
-                                } else {
-                                    return $minutes . ' Minutes Late';
-                                }
-                            };
-                        } elseif ($action === 'pulang') {
-                            $departureTime = Carbon::parse($record->created_at);
-                            $agreedDepartureTime = Carbon::parse('17:00:00');
-                    
-                            if ($departureTime->lt($agreedDepartureTime)) {
-                                $earlyDuration = $agreedDepartureTime->diff($departureTime);
-                                $hours = $earlyDuration->format('%h');
-                                $minutes = $earlyDuration->format('%i');
-                    
-                                if ($hours >= 1) {
-                                    return $hours . ' Hours and ' . $minutes . ' Minutes Early';
-                                } else {
-                                    return $minutes . ' Minutes Early';
-                                }
-                            } else {
-                                return 'On Time or Late';
-                            };
+                        if ($submissionTime->lte($deadline)) {
+                            return ['absensi' => 'On Time'];
                         } else {
-                            return 'Invalid action type'; // Handle other cases as needed
+                            $lateDuration = $submissionTime->diff($deadline);
+                            $hours = $lateDuration->format('%h');
+                            $minutes = $lateDuration->format('%i');
+                    
+                            if ($hours >= 1) {
+                                return ['absensi' => $hours . ' Hours and ' . $minutes . ' Minutes Late'];
+                            } else {
+                                return ['absensi' => $minutes . ' Minutes Late'];
+                            }
+                        }
+                    } elseif ($action === 'pulang') {
+                        $departureTime = Carbon::parse($record->created_at);
+                        $agreedDepartureTime = Carbon::parse('17:00:00');
+                    
+                        if ($departureTime->lt($agreedDepartureTime)) {
+                            $earlyDuration = $agreedDepartureTime->diff($departureTime);
+                            $hours = $earlyDuration->format('%h');
+                            $minutes = $earlyDuration->format('%i');
+                    
+                            if ($hours >= 1) {
+                                return ['absensi' => $hours . ' Hours and ' . $minutes . ' Minutes Early'];
+                            } else {
+                                return ['absensi' => $minutes . ' Minutes Early'];
+                            }
                         }
                     }
-                    ),
+            
+                    // If none of the above conditions match, you may want to handle it in a way that makes sense for your use case.
+                    // For example, you can return an empty array or a default value.
+                    return [];
+                }),
                 // Tables\Columns\TextColumn::make('Absensi')
                 //     ->state(function (Attendance $record) {
                 //         $submissionTime = Carbon::parse($record->created_at); // Assuming the column holds the submission time
