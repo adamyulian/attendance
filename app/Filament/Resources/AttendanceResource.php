@@ -110,6 +110,7 @@ class AttendanceResource extends Resource
                 $userId = Auth::user()->id;
                 return $query->where('user_id', $userId);
             })
+            ->defaultSort('desc')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama')
@@ -124,7 +125,7 @@ class AttendanceResource extends Resource
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->time()
                     ->label('Time')
                     ->sortable(),
                
