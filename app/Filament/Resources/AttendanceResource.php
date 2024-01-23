@@ -250,7 +250,7 @@ class AttendanceResource extends Resource
                             'alt' => 'Activity Picture',
                             'loading' => 'lazy',
                             ])
-                            ->size(500)
+                            ->size(300)
                         ]),
             ]);
     }
