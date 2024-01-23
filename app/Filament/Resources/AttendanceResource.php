@@ -225,12 +225,15 @@ class AttendanceResource extends Resource
         return $infolist
             ->schema([
                     InfolistSection::make('Attendance Information')
+                    ->columns(2)
                     ->schema([
                         TextEntry::make('user.name')
-                            ->label('Nama Personil')
+                            ->columnSpan(1)
+                            ->label('Name')
                             ->weight(FontWeight::Bold)
                             ->size(TextEntry\TextEntrySize::Large),
                         TextEntry::make('status')
+                            ->columnSpan(1)
                             ->badge()
                             ->color(fn (string $state): string => match ($state) {
                                 'datang' => 'info',
@@ -238,8 +241,11 @@ class AttendanceResource extends Resource
                             })
                             ->label('Status'),
                         TextEntry::make('created_at')
+                            ->columnSpan(1)
                             ->label('Time'),
                         ImageEntry::make('img')
+                            ->label('Image')
+                            ->columnSpan(1)
                             ->extraImgAttributes([
                             'alt' => 'Activity Picture',
                             'loading' => 'lazy',
