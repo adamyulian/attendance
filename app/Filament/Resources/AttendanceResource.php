@@ -223,34 +223,35 @@ class AttendanceResource extends Resource
 
     {
         return $infolist
-            ->schema([Group::make([
-                InfolistSection::make('Attendance Information')
-                ->columns(4)
-                ->schema([
-                    TextEntry::make('user.name')
-                        ->columnSpan(2)
-                        ->label('Nama Personil')
-                        ->weight(FontWeight::Bold)
-                        ->size(TextEntry\TextEntrySize::Large),
-                    TextEntry::make('status')
-                        ->columnSpan(2)
-                        ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'datang' => 'info',
-                            'pulang' => 'success',
-                        })
-                        ->label('Status'),
-                    TextEntry::make('created_at')
-                        ->columnSpan(2)
-                        ->label('Penggunaan'),
-                    ImageEntry::make('img')
-                        ->extraImgAttributes([
-                        'alt' => 'Logo',
-                        'loading' => 'lazy',
-                        ])
-                        ->size(100)
-                ]),
-            ])
+            ->schema([
+                Group::make([
+                    InfolistSection::make('Attendance Information')
+                    ->columns(4)
+                    ->schema([
+                        TextEntry::make('user.name')
+                            ->columnSpan(4)
+                            ->label('Nama Personil')
+                            ->weight(FontWeight::Bold)
+                            ->size(TextEntry\TextEntrySize::Large),
+                        TextEntry::make('status')
+                            ->columnSpan(4)
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'datang' => 'info',
+                                'pulang' => 'success',
+                            })
+                            ->label('Status'),
+                        TextEntry::make('created_at')
+                            ->columnSpan(4)
+                            ->label('Time'),
+                        ImageEntry::make('img')
+                            ->extraImgAttributes([
+                            'alt' => 'Logo',
+                            'loading' => 'lazy',
+                            ])
+                            ->size(100)
+                        ]),
+                ])
             ]);
     }
 
