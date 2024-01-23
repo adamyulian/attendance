@@ -225,7 +225,6 @@ class AttendanceResource extends Resource
         return $infolist
             ->schema([
                     InfolistSection::make('Attendance Information')
-                    ->columnSpanFull()
                     ->schema([
                         TextEntry::make('user.name')
                             ->label('Nama Personil')
