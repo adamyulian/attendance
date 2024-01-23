@@ -131,8 +131,8 @@ class AttendanceResource extends Resource
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->time()
                     ->label('Time')
+                    ->dateTime()
                     ->sortable(),
                
                 Tables\Columns\TextColumn::make('Absensi')
@@ -191,10 +191,6 @@ class AttendanceResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                 ->label('Lokasi Absen')
                 ->limit(20)
-                ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                ->label('Day')
-                ->date()
                 ->searchable(),
                 
                 Tables\Columns\TextColumn::make('updated_at')
