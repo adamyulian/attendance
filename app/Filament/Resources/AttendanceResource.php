@@ -137,7 +137,7 @@ class AttendanceResource extends Resource
                         $action = $record->status;
                     
                         if ($action === 'datang') {
-                            return $submissionTime = Carbon::parse($record->created_at);
+                            $submissionTime = Carbon::parse($record->created_at);
                             $deadlineTime = Carbon::parse('08:00:00');
                     
                             $deadlineDay = $record->created_at->format('Y-m-d');
@@ -157,7 +157,7 @@ class AttendanceResource extends Resource
                                 }
                             };
                         } elseif ($action === 'pulang') {
-                            return $departureTime = Carbon::parse($record->created_at);
+                            $departureTime = Carbon::parse($record->created_at);
                             $agreedDepartureTime = Carbon::parse('17:00:00');
                     
                             if ($departureTime->lt($agreedDepartureTime)) {
