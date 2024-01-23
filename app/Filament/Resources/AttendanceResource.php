@@ -192,6 +192,10 @@ class AttendanceResource extends Resource
                 ->label('Lokasi Absen')
                 ->limit(20)
                 ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                ->label('Day')
+                ->date()
+                ->searchable(),
                 
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
