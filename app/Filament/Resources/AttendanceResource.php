@@ -11,15 +11,20 @@ use Filament\Forms\Form;
 use App\Models\Attendance;
 use Filament\Tables\Table;
 use App\Helpers\LocationHelpers;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Attendance\checkOnTime;
 use Filament\Forms\Components\Section;
+use Filament\Support\Enums\FontWeight;
+use Filament\Infolists\Components\Group;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\TextEntry;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AttendanceResource\Pages;
 use App\Filament\Resources\AttendanceResource\RelationManagers;
-use App\Models\Attendance\checkOnTime;
+use Filament\Infolists\Components\ImageEntry;
 
 class AttendanceResource extends Resource
 {
@@ -110,7 +115,7 @@ class AttendanceResource extends Resource
                 $userId = Auth::user()->id;
                 return $query->where('user_id', $userId);
             })
-            ->defaultSort('desc')
+            ->defaultSort(column:'created_at', direction:'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama')
@@ -211,6 +216,41 @@ class AttendanceResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+
+    {
+        return $infolist
+            ->schema([Group::make([
+                Section::make('Attendance Information')
+                ->columns(4)
+                ->schema([
+                    TextEntry::make('user.name')
+                        ->columnSpan(2)
+                        ->label('Nama Personil')
+                        ->weight(FontWeight::Bold)
+                        ->size(TextEntry\TextEntrySize::Large),
+                    TextEntry::make('status')
+                        ->columnSpan(2)
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state) {
+                            'datang' => 'info',
+                            'pulang' => 'success',
+                        })
+                        ->label('Status'),
+                    TextEntry::make('created_at')
+                        ->columnSpan(2)
+                        ->label('Penggunaan'),
+                    ImageEntry::make('img')
+                        ->extraImgAttributes([
+                        'alt' => 'Logo',
+                        'loading' => 'lazy',
+                        ])
+                        ->size(100)
+                ]),
+            ])
+            ]);
     }
 
     public static function getPages(): array
