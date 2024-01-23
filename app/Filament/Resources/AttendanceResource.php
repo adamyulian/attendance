@@ -19,6 +19,7 @@ use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AttendanceResource\Pages;
 use App\Filament\Resources\AttendanceResource\RelationManagers;
+use App\Models\Attendance\checkOnTime;
 
 class AttendanceResource extends Resource
 {
@@ -133,31 +134,77 @@ class AttendanceResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('Absensi')
                     ->state(function (Attendance $record) {
-                        $submissionTime = Carbon::parse($record->created_at); // Assuming the column holds the submission time
-                        $deadlineTime = Carbon::parse('07:00:00'); // Static value for the deadline time
-
-                        $deadlineDay = $record->created_at->format('Y-m-d');
-                        $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
-
-                        if ($submissionTime->lte($deadline)) {
-                            // On time or before the deadline
-                            return 'On Time';
-                        } else {
-                            // Late
-                            $lateDuration = $submissionTime->diff($deadline);
-                            $hours = $lateDuration->format('%h');
-                            $minutes = $lateDuration->format('%i');
-                        
-                            if ($hours >= 1) {
-                                // Late by more than 1 hour
-                                return $hours . ' Hours and ' . $minutes . ' Minutes Late';
+                        $action = $record->status;
+                    
+                        if ($action === 'datang') {
+                            return $submissionTime = Carbon::parse($record->created_at);
+                            $deadlineTime = Carbon::parse('08:00:00');
+                    
+                            $deadlineDay = $record->created_at->format('Y-m-d');
+                            $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
+                    
+                            if ($submissionTime->lte($deadline)) {
+                                return 'On Time';
                             } else {
-                                // Late by less than 1 hour
-                                return $minutes . ' Minutes Late';
-                            }
+                                $lateDuration = $submissionTime->diff($deadline);
+                                $hours = $lateDuration->format('%h');
+                                $minutes = $lateDuration->format('%i');
+                    
+                                if ($hours >= 1) {
+                                    return $hours . ' Hours and ' . $minutes . ' Minutes Late';
+                                } else {
+                                    return $minutes . ' Minutes Late';
+                                }
+                            };
+                        } elseif ($action === 'pulang') {
+                            return $departureTime = Carbon::parse($record->created_at);
+                            $agreedDepartureTime = Carbon::parse('17:00:00');
+                    
+                            if ($departureTime->lt($agreedDepartureTime)) {
+                                $earlyDuration = $agreedDepartureTime->diff($departureTime);
+                                $hours = $earlyDuration->format('%h');
+                                $minutes = $earlyDuration->format('%i');
+                    
+                                if ($hours >= 1) {
+                                    return $hours . ' Hours and ' . $minutes . ' Minutes Early';
+                                } else {
+                                    return $minutes . ' Minutes Early';
+                                }
+                            } else {
+                                return 'On Time or Late';
+                            };
+                        } else {
+                            return 'Invalid action type'; // Handle other cases as needed
                         }
+                    }
+                    ),
+                // Tables\Columns\TextColumn::make('Absensi')
+                //     ->state(function (Attendance $record) {
+                //         $submissionTime = Carbon::parse($record->created_at); // Assuming the column holds the submission time
+                //         $deadlineTime = Carbon::parse('07:00:00'); // Static value for the deadline time
 
-                    }),
+                //         $deadlineDay = $record->created_at->format('Y-m-d');
+                //         $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
+
+                //         if ($submissionTime->lte($deadline)) {
+                //             // On time or before the deadline
+                //             return 'On Time';
+                //         } else {
+                //             // Late
+                //             $lateDuration = $submissionTime->diff($deadline);
+                //             $hours = $lateDuration->format('%h');
+                //             $minutes = $lateDuration->format('%i');
+                        
+                //             if ($hours >= 1) {
+                //                 // Late by more than 1 hour
+                //                 return $hours . ' Hours and ' . $minutes . ' Minutes Late';
+                //             } else {
+                //                 // Late by less than 1 hour
+                //                 return $minutes . ' Minutes Late';
+                //             }
+                //         }
+
+                //     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->label('Time')

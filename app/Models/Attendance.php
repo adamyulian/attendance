@@ -20,6 +20,48 @@ class Attendance extends Model
         'img'
     ];
 
+    public function checkOnTime() {
+        $submissionTime = Carbon::parse($this->created_at);
+        $deadlineTime = Carbon::parse('08:00:00');
+
+        $deadlineDay = $this->created_at->format('Y-m-d');
+        $deadline = Carbon::parse($deadlineDay)->setTime($deadlineTime->hour, $deadlineTime->minute, $deadlineTime->second);
+
+        if ($submissionTime->lte($deadline)) {
+            return 'On Time';
+        } else {
+            $lateDuration = $submissionTime->diff($deadline);
+            $hours = $lateDuration->format('%h');
+            $minutes = $lateDuration->format('%i');
+
+            if ($hours >= 1) {
+                return $hours . ' Hours and ' . $minutes . ' Minutes Late';
+            } else {
+                return $minutes . ' Minutes Late';
+            }
+        }
+    }
+
+    public function checkEarlyDeparture() {
+        $departureTime = Carbon::parse($this->created_at);
+        $agreedDepartureTime = Carbon::parse('17:00:00');
+
+        if ($departureTime->lt($agreedDepartureTime)) {
+            $earlyDuration = $agreedDepartureTime->diff($departureTime);
+            $hours = $earlyDuration->format('%h');
+            $minutes = $earlyDuration->format('%i');
+
+            if ($hours >= 1) {
+                return $hours . ' Hours and ' . $minutes . ' Minutes Early';
+            } else {
+                return $minutes . ' Minutes Early';
+            }
+        } else {
+            return 'On Time or Late';
+        }
+    }
+
+
     
     protected $appends = [
         'loc',
