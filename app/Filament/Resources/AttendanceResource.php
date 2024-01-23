@@ -228,12 +228,10 @@ class AttendanceResource extends Resource
                     ->columnSpanFull()
                     ->schema([
                         TextEntry::make('user.name')
-                        ->columnSpanFull()
                             ->label('Nama Personil')
                             ->weight(FontWeight::Bold)
                             ->size(TextEntry\TextEntrySize::Large),
                         TextEntry::make('status')
-                        ->columnSpanFull()
                             ->badge()
                             ->color(fn (string $state): string => match ($state) {
                                 'datang' => 'info',
@@ -241,14 +239,12 @@ class AttendanceResource extends Resource
                             })
                             ->label('Status'),
                         TextEntry::make('created_at')
-                        ->columnSpanFull()
                             ->label('Time'),
                         ImageEntry::make('img')
                             ->extraImgAttributes([
-                            'alt' => 'Logo',
+                            'alt' => 'Activity Picture',
                             'loading' => 'lazy',
                             ])
-                            ->columnSpanFull()
                             ->size(100)
                         ]),
             ]);
