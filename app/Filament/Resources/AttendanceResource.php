@@ -95,6 +95,7 @@ class AttendanceResource extends Resource
                     ->readOnly()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('img')
+                    ->fetchFileInformation(false)
                     ->label('Foto Kehadiran'),
                 Forms\Components\TextInput::make('address')
                     ->readOnly(),
