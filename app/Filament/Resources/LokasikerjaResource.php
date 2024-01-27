@@ -38,8 +38,6 @@ class LokasikerjaResource extends Resource
                     Map::make('location')
                     ->columnSpan(2)
                     ->label('Create Location')
-                    ->geolocate() // adds a button to request device location and set map marker accordingly
-                    ->geolocateOnLoad(true, 'always')// Enable geolocation on load for every form
                     ->draggable() // Disable dragging to move the marker
                     ->clickable() // Disable clicking to move the marker
                     ->defaultZoom(15) // Set the initial zoom level to 500
