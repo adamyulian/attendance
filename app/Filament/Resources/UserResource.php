@@ -43,7 +43,13 @@ class UserResource extends Resource
                         'leader' => 'Leader'
                     ])
                     ->required(),
-                    
+                Forms\Components\Select::make('team')
+                    ->native(false)
+                    ->options([
+                        'team 1' =>'Team Bendul',
+                        'team 2' => 'Team Taman Surya',
+                    ])
+                    ->required(),
             ]);
     }
 
@@ -61,6 +67,13 @@ class UserResource extends Resource
                         'admin' => 'info',
                         'worker' => 'success',
                         'leader' => 'danger',
+                    })
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('team')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'team 1' => 'info',
+                        'team 2' => 'success',
                     })
                     ->searchable(),
                 

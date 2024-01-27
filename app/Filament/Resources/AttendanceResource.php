@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AttendanceResource\Pages;
 use Filament\Infolists\Components\Section as InfolistSection;
 use App\Filament\Resources\AttendanceResource\RelationManagers;
+use App\Models\Lokasikerja;
 
 class AttendanceResource extends Resource
 {
@@ -54,9 +55,11 @@ class AttendanceResource extends Resource
                         
                         fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
                                 // The allowed location (latitude and longitude).
-                                // $allowedLocation = [Target::find($get('target_id'))->lat, Target::find($get('target_id'))->lng];
+
+                                $userTeam = auth()->user()->team;
+                                $allowedLocation = [Lokasikerja::where('team',$userTeam)->value('lat'), Lokasikerja::where('team',$userTeam)->value('lng')];
                                 // dd($allowedLocation);
-                                $allowedLocation = [-7.309865473166658, 112.74843818425389];
+                                // $allowedLocation = [-7.309865473166658, 112.74843818425389];
                     
                                 // The radius in meters.
                                 $radius = 100;
@@ -71,7 +74,7 @@ class AttendanceResource extends Resource
                                                                   
                                 // Check if the user is within the specified radius.
                                 if ($distance > $radius) {
-                                    $fail("Lokasi Anda Tidak berada pada Radius yang diperbolehkan");
+                                    $fail("Lokasi Anda tidak berada pada Radius yang diizinkan");
                                 }
                             
                         }])
