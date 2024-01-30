@@ -45,9 +45,13 @@ class UserResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('team')
                     ->native(false)
-                    ->options([
-                        'team 1' =>'Team Bendul',
-                        'team 2' => 'Team Taman Surya',
+                    ->relationship('team', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
                     ])
                     ->required(),
             ]);

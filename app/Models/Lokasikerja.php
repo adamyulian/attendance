@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -35,7 +36,7 @@ class Lokasikerja extends Model
         'lng',
         'address',
         'location',
-        'team'
+        'team_id'
     ];
 
     protected $appends = [
@@ -119,5 +120,10 @@ class Lokasikerja extends Model
     public static function getComputedLocation(): string
     {
         return 'location';
+    }
+
+    public function Team()
+    {
+        return $this->belongsTo(related:Team::class);
     }
 }

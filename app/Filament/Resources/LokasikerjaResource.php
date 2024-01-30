@@ -30,9 +30,13 @@ class LokasikerjaResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('team')
                     ->native(false)
-                    ->options([
-                        'team 1' =>'Team Bendul',
-                        'team 2' => 'Team Wawan',
+                    ->relationship('team', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
                     ])
                     ->required(),
                     Map::make('location')
@@ -71,12 +75,8 @@ class LokasikerjaResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                     ->searchable()
                     ->limit(40),
-                Tables\Columns\TextColumn::make('team')
+                Tables\Columns\TextColumn::make('team.name')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'team 1' => 'info',
-                        'team 2' => 'success',
-                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

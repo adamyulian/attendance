@@ -56,8 +56,8 @@ class AttendanceResource extends Resource
                         fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
                                 // The allowed location (latitude and longitude).
 
-                                $userTeam = auth()->user()->team;
-                                $allowedLocation = [Lokasikerja::where('team',$userTeam)->value('lat'), Lokasikerja::where('team',$userTeam)->value('lng')];
+                                $userTeam = auth()->user()->team_id;
+                                $allowedLocation = [Lokasikerja::where('team_id',$userTeam)->value('lat'), Lokasikerja::where('team',$userTeam)->value('lng')];
                                 // dd($allowedLocation);
                                 // $allowedLocation = [-7.309865473166658, 112.74843818425389];
                     
@@ -80,7 +80,7 @@ class AttendanceResource extends Resource
                         }])
                     ->label('Your Location')
                     ->geolocate() // adds a button to request device location and set map marker accordingly
-                    // ->geolocateOnLoad(true, 'always')// Enable geolocation on load for every form
+                    ->geolocateOnLoad(true, 'always')// Enable geolocation on load for every form
                     ->draggable(false) // Disable dragging to move the marker
                     ->clickable(false) // Disable clicking to move the marker
                     ->defaultZoom(15) // Set the initial zoom level to 500
@@ -207,7 +207,6 @@ class AttendanceResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
