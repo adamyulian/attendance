@@ -73,12 +73,8 @@ class UserResource extends Resource
                         'leader' => 'danger',
                     })
                     ->searchable(),
-                Tables\Columns\TextColumn::make('team')
+                Tables\Columns\TextColumn::make('team.name')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'team 1' => 'info',
-                        'team 2' => 'success',
-                    })
                     ->searchable(),
                 
                 // Tables\Columns\TextColumn::make('email_verified_at')
