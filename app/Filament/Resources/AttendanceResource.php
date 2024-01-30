@@ -57,7 +57,7 @@ class AttendanceResource extends Resource
                                 // The allowed location (latitude and longitude).
 
                                 $userTeam = auth()->user()->team_id;
-                                $allowedLocation = [Lokasikerja::where('team_id',$userTeam)->value('lat'), Lokasikerja::where('team',$userTeam)->value('lng')];
+                                $allowedLocation = [Lokasikerja::where('team_id',$userTeam)->value('lat'), Lokasikerja::where('team_id',$userTeam)->value('lng')];
                                 // dd($allowedLocation);
                                 // $allowedLocation = [-7.309865473166658, 112.74843818425389];
                     
