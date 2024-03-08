@@ -93,8 +93,8 @@ class UserResource extends Resource
             ])
             ->filters([
 
-                Filter::make('Group')
-                    ->modifyFormFieldUsing(fn (Select $field) => $field->inline(false))
+                // Filter::make('Group')
+                //     ->modifyFormFieldUsing(fn (Select $field) => $field->inline(false))
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
